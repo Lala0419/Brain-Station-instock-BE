@@ -101,28 +101,21 @@ exports.updateWarehouse = (req, res) => {
 };
 
 exports.deleteWarehouse = (req, res) => {
-  knex("warehouses")
-    .delete()
-    .where({ id: req.params.id })
-    .then(() => {
-      // For DELETE response we can use 204 status code
-      res
-        .status(204)
-        .send(`Warehouse with id: ${req.params.id} has been deleted`);
-    })
-    .catch((err) =>
-      res.status(400).send(`Error deleting Warehouse ${req.params.id} ${err}`)
-    );
+  const deleteWarehouse = () =>
+    knex("warehouses").delete().where({ id: req.params.id });
 
-  knex("inventories")
-    .delete()
-    .where({ warehouse_id: req.params.id })
-    .then(() => {
-      // For DELETE response we can use 204 status code
+  const deleteInventories = () =>
+    knex("inventories").delete().where({ warehouse_id: req.params.id });
+
+  deleteWarehouse()
+    .then(deleteInventories)
+    .then(() =>
       res
         .status(204)
-        .send(`Warehouse with id: ${req.params.id} has been deleted`);
-    })
+        .send(
+          `Warehouse with id: ${req.params.id} has been deleted along with all inventory`
+        )
+    )
     .catch((err) =>
       res.status(400).send(`Error deleting Warehouse ${req.params.id} ${err}`)
     );

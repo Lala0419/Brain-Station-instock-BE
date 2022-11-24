@@ -1,12 +1,16 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const PORT = process.env.port || 5050;
+const PORT = process.env.PORT || 5050;
+const cors = require("cors");
+
 
 const warehouseRoutes = require("./routes/warehouse");
 const inventoryRoutes = require("./routes/inventory");
 
 app.use(express.json());
+
+app.use(cors());
 
 //basic home route
 app.get("/", (req, res) => {

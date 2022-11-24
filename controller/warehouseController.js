@@ -107,8 +107,8 @@ exports.deleteWarehouse = (req, res) => {
   const deleteInventories = () =>
     knex("inventories").delete().where({ warehouse_id: req.params.id });
 
-  deleteWarehouse()
-    .then(deleteInventories)
+  deleteInventories()
+    .then(deleteWarehouse)
     .then(() =>
       res
         .status(204)
